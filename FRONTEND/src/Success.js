@@ -29,18 +29,6 @@ const Success = (props) => {
         }
         setuserlogin(true);
         setuser(userdata);
-        // cartproducts.forEach(item => {
-        //   axios.post("http://localhost:5000/placeorder",{
-        //     user_id:userdata.id,
-        //     product_id:item.product_id,
-        //     order_quantity:item.product_quantity,
-        //     order_amount:item.product_quantity * item.product_price,
-        //   }).then((res)=>{
-        //       console.log("placed successfully");
-        //       setcartproducts([]);
-        //       navigate("/")
-        //   })
-        // });  
       }
   }
   const placeorder=async()=>{
