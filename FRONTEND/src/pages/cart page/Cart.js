@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { AiOutlineMinus } from "react-icons/ai";
 import { AiOutlinePlus } from "react-icons/ai";
-// import DataTable from "react-data-table-component";
 import { useTable } from "react-table";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -36,14 +35,6 @@ const Cart = (props) => {
     setsubtotal(ans);
   }, []);
   const delproduct = (id) => {
-    // for (let i = 0; i < cartproducts.length; i++) {
-    //   if (cartproducts[i].product_id === id) {
-    //     let ans = subtotal;
-    //     ans = ans - cartproducts[i].product_price;
-    //     setsubtotal(ans);
-    //     break;
-    //   }
-    // }
     const newarr = cartproducts.filter((item) => {
       return item.product_id !== id;
     });
@@ -66,9 +57,6 @@ const Cart = (props) => {
           delproduct(id);
           break;
         } else {
-          // let ans = subtotal;
-          // ans = ans - cartproducts[i].product_price;
-          // setsubtotal(ans);
           cartproducts[i].product_quantity =
             cartproducts[i].product_quantity - 1;
           cartproducts[i].product_subtotal=cartproducts[i].product_subtotal-cartproducts[i].product_price;
@@ -92,9 +80,6 @@ const Cart = (props) => {
   const increase = (id) => {
     for (let i = 0; i < cartproducts.length; i++) {
       if (cartproducts[i].product_id === id) {
-        // let ans = subtotal;
-        // ans = ans + cartproducts[i].product_price;
-        // setsubtotal(ans);
         cartproducts[i].product_quantity = cartproducts[i].product_quantity + 1;
         cartproducts[i].product_subtotal=cartproducts[i].product_subtotal + cartproducts[i].product_price;
         break;
@@ -187,71 +172,7 @@ const Cart = (props) => {
     ],
     [subtotal]
   );
-  // const columns = [
-  //   {
-  //     name: "Item",
-  //     selector: (row) => (
-  //       <img
-  //         style={{
-  //           width: "110px",
-  //           height: "130px",
-  //           "object-fit": "scale-down",
-  //         }}
-  //         src={row.product_img}
-  //       />
-  //     ),
-  //   },
-  //   {
-  //     name: "Price",
-  //     selector: (row) => row.product_price,
-  //   },
-  //   {
-  //     name: "Quantity",
-  //     selector: (row) => (
-  //       <div>
-  //         <AiOutlineMinus
-  //           size={"1.5rem"}
-  //           style={{ "padding-top": ".9rem", cursor: "pointer" }}
-  //           onClick={() => {
-  //             decrease(row.product_id);
-  //             setsubtotal(subtotal - row.product_price);
-  //           }}
-  //         />
-  //         {row.product_quantity}
-  //         <AiOutlinePlus
-  //           size={"1.5rem"}
-  //           style={{ "padding-top": ".9rem", cursor: "pointer" }}
-  //           onClick={() => {
-  //             increase(row.product_id);
-  //             setsubtotal(subtotal + row.product_price);
-  //           }}
-  //         />
-  //       </div>
-  //     ),
-  //   },
-  //   {
-  //     name: "Sub-Total",
-  //     selector: (row) => row.product_quantity * row.product_price,
-  //   },
-  //   {
-  //     name: "Remove",
-  //     selector: (row) => (
-  //       <div>
-  //         <RiDeleteBin5Line
-  //           size={"1.5rem"}
-  //           style={{ color: "red", cursor: "pointer" }}
-  //           onClick={() => {
-  //             delproduct(row.product_id);
-  //             setsubtotal(subtotal - row.product_price * row.product_quantity);
-  //           }}
-  //         />
-  //       </div>
-  //     ),
-  //   },
-  // ];
-  // const tableinstance=useTable({columns,cartproducts});
   const {getTableProps, getTableBodyProps, headerGroups, rows, prepareRow }=useTable({columns,data:cartproducts});
-  {/* <DataTable columns={columns} data={cartproducts} fixedHeader /> */}
   return (
     <Wrapper>
       {cartproducts.length > 0 ? (
