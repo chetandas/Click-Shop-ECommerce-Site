@@ -160,9 +160,12 @@ export default function Header(props) {
               <div className="user-info">
                 <h2>Welcome!!<br />{isadmin === false ? userdetails.name : "Admin"}</h2>
                 <hr />
-                <Link to={isadmin === false ? "/orders": "/admindashboard"} onClick={() => setlogicon(!logicon)}>
-                  <h2>{isadmin === false ? <GiShoppingCart className="menu-icons" size="1.5rem" /> 
-                  : <FaUserAlt className="menu-icons" size="1.5rem"/> }{isadmin === false  ? "MyOrders" : "Dashboard"}</h2>
+                {isadmin && <Link to="/admindashboard" onClick={() => setlogicon(!logicon)}>
+                  <h2><FaUserAlt className="menu-icons" size="1.5rem" />Dashboard</h2>
+                </Link>}
+                {isadmin && <hr/>}
+                <Link to="/orders" onClick={() => setlogicon(!logicon)}>
+                  <h2><GiShoppingCart className="menu-icons" size="1.5rem" />MyOrders</h2>
                 </Link>
                 <hr />
                 <Link to="/cart" onClick={() => setlogicon(!logicon)}>
