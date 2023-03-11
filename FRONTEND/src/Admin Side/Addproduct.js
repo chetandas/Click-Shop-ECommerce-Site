@@ -21,20 +21,48 @@ const Addproduct = () => {
         const result = await axios.get("http://localhost:5000/getcategories");
         setcategories(result.data);
     }
-
-    const addproduct=async(e)=>{
-        e.preventDefault();
-        const res=await axios.post("http://localhost:5000/addproduct",{
-            product_sname:prodsname,
-            product_name:prodname,
-            product_category:prodcategory,
-            product_brand:prodbrand,
-            product_desc:proddesc,
-            product_price:prodprice,
-            product_img:prodimage,
-        })
-        console.log(res.data);
+    
+    /*while adding we need product id bcoz i forgot to put auto increment for product_id and used it as foreign key in orders table
+  now to fix it we need to remove it as foreign key and again modify it so instead directly get the latest value of product_id from
+  database by using MAX() func and do +1 to it and send it to backend while making post req for adding product */
+  const addproduct = async (e) => {
+    e.preventDefault();
+    const ans = await axios.get("http://localhost:5000/getproductid");
+    if(ans.data.message === "Cant get the id")
+    {
+      swal({
+        title: "Something Went Wrong",
+        text:"Please Try again",
+        icon: "error",
+        button:"Try Again"
+      })
     }
+    else {
+      const res = await axios.post("http://localhost:5000/addproduct", {
+        product_id:ans.data[0].product_id+1,
+        product_sname: prodsname,
+        product_name: prodname,
+        product_category: prodcategory,
+        product_brand: prodbrand,
+        product_desc: proddesc,
+        product_price: prodprice,
+        product_img: prodimage,
+      });
+      console.log(res.data);
+      if (res.status === 200) {
+        swal({
+          title: "Product Added Successfully",
+          icon: "success",
+          button: {
+            text: "Continue",
+            value: "button",
+          },
+        }).then((value) => {
+          navigate("/admindashboard");
+        });
+      }
+    }
+  };
   return (
     <Wrapper>
       <div className="container">
