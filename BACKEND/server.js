@@ -21,7 +21,7 @@ const stripe = Stripe(process.env.stripe_key);
 app.use(
   cors({
     origin: ["http://localhost:3000"],
-    methods: ["GET", "POST"],
+    methods: ["GET", "POST", "DELETE"],
     credentials: true,
   })
 ); // Use this after the variable declaration and this is for middleware
@@ -468,15 +468,16 @@ app.post("/updatestatus",(req,res)=>{
 
 /*7-> adding product into the products table */
 app.post("/addproduct",(req,res)=>{
+  const product_id=req.body.product_id;
   const product_sname=req.body.product_sname;
   const product_name=req.body.product_name;
   const product_category=req.body.product_category;
   const product_brand=req.body.product_brand;
   const product_desc=req.body.product_desc;
-  const product_price=req.body.product_desc;
+  const product_price=req.body.product_price;
   const product_img=req.body.product_img;
-  const q="INSERT INTO products (product_sname,product_name,product_category,product_brand,product_desc,product_price,product_img) VALUES(?, ?, ?, ?, ?, ?, ?)";
-  db.query(q,[product_sname,product_name,product_category,product_brand,product_desc,product_price,product_img],(err,data)=>{
+  const q="INSERT INTO products (product_id,product_sname,product_name,product_category,product_brand,product_desc,product_price,product_img) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+  db.query(q,[product_id,product_sname,product_name,product_category,product_brand,product_desc,product_price,product_img],(err,data)=>{
     if(err)
     {
       res.send(err);
@@ -488,7 +489,7 @@ app.post("/addproduct",(req,res)=>{
   })
 })
 
-/*7-> when admin clicks on edit button in products table then he will be redirected product form where all the data of that
+/*8-> when admin clicks on edit button in products table then he will be redirected product form where all the data of that
 particular must be present so that he can edit the existing data of that product lyk changing price as such so for that we need
 to fetch all the details frm the database*/
 app.get("/getdetails/:id",(req,res)=>{
@@ -506,7 +507,7 @@ app.get("/getdetails/:id",(req,res)=>{
   })
 })
 
-/*8->editing and updating product details */
+/*9->editing and updating product details */
 app.post("/updateproduct/:id",(req,res)=>{
   const id=req.body.id;
   // console.log(id);
@@ -531,14 +532,32 @@ app.post("/updateproduct/:id",(req,res)=>{
   })
 })
 
-/*9->deleting a product from our database */
-app.get("/deleteproduct/:id",(req,res)=>{
+/*10->deleting a product from our database */
+app.delete("/deleteproduct/:id",(req,res)=>{
   const {id}=req.params;
   const q="DELETE FROM products WHERE product_id=?";
   db.query(q,id,(err,data)=>{
     if(err)
     {
       res.send(err);
+    }
+    else
+    {
+      res.send(data);
+      console.log("deleted successfully");
+    }
+  })
+})
+
+/*11->getting the product id from the product that we are willing to add we are dng dis bcoz i forgot to put the id as auto increment
+and used it as foreign key in orders table so now uh cant modify it directly uh need to change the constraints so instead of dng dat
+we will directly get the latest productid and do +1 to it*/
+app.get('/getproductid',(req,res)=>{
+  const q="SELECT MAX(product_id) as product_id FROM products";
+  db.query(q,(err,data)=>{
+    if(err)
+    {
+      res.send({message:"Cant get the id"});
     }
     else
     {
