@@ -115,6 +115,37 @@ const Viewproducts = () => {
   state.pageSize = 5;
   const { pageIndex } = state;
   // console.log(state);
+  const deleteproduct=async(id)=>{
+    //we are using sweet alert
+   swal({
+    title: "Are you sure?",
+    text: "Once deleted, you will not be able to recover this product details!",
+    icon: "warning",
+    buttons: true,
+    dangerMode: true,
+  })
+  //now once user clicks the button then we will call a will delete function
+  .then(async (willDelete) => {//make this async bcoz axios is asynchronous
+    if (willDelete) {
+        const res=await axios.delete(`http://localhost:5000/deleteproduct/${id}`)
+        //after sending delete request then again we need to fetch products from database so that's y call getproducts
+        getproducts(); 
+        swal({
+          title: "Deleted Product Successfully",
+          icon: "success",
+          button: {
+            text:"Continue",
+            value:"button",
+          },
+        }).then((value)=>{
+          pageIndex=0;
+        })
+    } 
+    else {
+      swal("Product is not deleted!");
+    }
+  });
+}
   return (
     <Wrapper>
       <div className="container">
